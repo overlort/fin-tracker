@@ -20,13 +20,13 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать проект через Create React App с TypeScript шаблоном:
+- [x] Создать проект через Create React App с TypeScript шаблоном:
   ```bash
   npx create-react-app fin-tracker --template typescript
   ```
   **Зачем:** Базовая структура React приложения с TypeScript
 
-- [ ] Перейти в директорию проекта:
+- [x] Перейти в директорию проекта:
   ```bash
   cd fin-tracker
   ```
@@ -35,27 +35,27 @@
 
 **Приоритет:** Высокий
 
-- [ ] Установить Capacitor и плагины:
+- [x] Установить Capacitor и плагины:
   ```bash
   npm install @capacitor/core @capacitor/cli @capacitor/ios
   npm install @capacitor-community/sqlite
   ```
   **Зачем:** Capacitor для мобильной платформы, SQLite для локального хранения
 
-- [ ] Установить React Router DOM:
+- [x] Установить React Router DOM:
   ```bash
   npm install react-router-dom
   ```
   **Зачем:** Роутинг между страницами приложения
 
-- [ ] Установить Tailwind CSS и зависимости:
+- [x] Установить Tailwind CSS и зависимости:
   ```bash
   npm install -D tailwindcss postcss autoprefixer
   npm install -D tailwindcss-animate
   ```
   **Зачем:** Стилизация компонентов
 
-- [ ] Установить shadcn/ui зависимости:
+- [x] Установить shadcn/ui зависимости:
   ```bash
   npm install class-variance-authority clsx tailwind-merge
   npm install @radix-ui/react-dialog @radix-ui/react-select
@@ -69,7 +69,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Проверить `tsconfig.json` - должен быть включен strict mode:
+- [x] Проверить `tsconfig.json` - должен быть включен strict mode:
   ```json
   {
     "compilerOptions": {
@@ -80,7 +80,7 @@
   ```
   **Зачем:** Строгая типизация для безопасности кода
 
-- [ ] Настроить path aliases в `tsconfig.json`:
+- [x] Настроить path aliases в `tsconfig.json`:
   ```json
   {
     "compilerOptions": {
@@ -101,13 +101,13 @@
 
 **Приоритет:** Высокий
 
-- [ ] Инициализировать Tailwind CSS:
+- [x] Инициализировать Tailwind CSS:
   ```bash
   npx tailwindcss init -p
   ```
   **Зачем:** Создание конфигурационных файлов
 
-- [ ] Настроить `tailwind.config.js`:
+- [x] Настроить `tailwind.config.js`:
   ```js
   module.exports = {
     darkMode: ["class"],
@@ -149,7 +149,7 @@
   ```
   **Зачем:** Настройка цветовой палитры и стилей
 
-- [ ] Обновить `src/index.css`:
+- [x] Обновить `src/index.css`:
   ```css
   @tailwind base;
   @tailwind components;
@@ -170,7 +170,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Инициализировать Capacitor:
+- [x] Инициализировать Capacitor:
   ```bash
   npx cap init
   ```
@@ -182,7 +182,7 @@
   ```
   **Зачем:** Поддержка iOS платформы
 
-- [ ] Настроить `capacitor.config.ts`:
+- [x] Настроить `capacitor.config.ts`:
   ```typescript
   import { CapacitorConfig } from '@capacitor/cli';
 
@@ -203,38 +203,38 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать структуру папок для фич:
+- [x] Создать структуру папок для фич:
   ```bash
   mkdir -p src/features/{expenses,income,goals,accounts,categories,recurring-expenses,statistics}
   ```
   **Зачем:** Организация кода по доменным фичам
 
-- [ ] Для каждой фичи создать подпапки:
+- [x] Для каждой фичи создать подпапки:
   ```bash
   # Для каждой фичи выполнить:
   mkdir -p src/features/{feature-name}/{components,hooks,services,types}
   ```
   **Зачем:** Изоляция логики каждой фичи
 
-- [ ] Создать структуру shared:
+- [x] Создать структуру shared:
   ```bash
   mkdir -p src/shared/{components/{ui,layout},hooks,utils/{date,currency,validation},types,constants}
   ```
   **Зачем:** Общие переиспользуемые компоненты и утилиты
 
-- [ ] Создать структуру services:
+- [x] Создать структуру services:
   ```bash
   mkdir -p src/services/database/migrations
   ```
   **Зачем:** Сервисы уровня приложения (БД)
 
-- [ ] Создать структуру app:
+- [x] Создать структуру app:
   ```bash
   mkdir -p src/app/{pages,providers}
   ```
   **Зачем:** Конфигурация приложения и провайдеры
 
-- [ ] Создать папку для стилей:
+- [x] Создать папку для стилей:
   ```bash
   mkdir -p src/styles
   ```
@@ -248,7 +248,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/services/database/db.ts` - базовый класс для работы с SQLite:
+- [x] Создать `src/services/database/db.ts` - базовый класс для работы с SQLite:
   ```typescript
   import { SQLiteDBConnection } from '@capacitor-community/sqlite';
   import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
@@ -278,7 +278,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/services/database/schema.ts` с SQL схемой:
+- [x] Создать `src/services/database/schema.ts` с SQL схемой:
   ```typescript
   export const schema = {
     categories: `
@@ -355,7 +355,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/services/database/migrations/migration.ts`:
+- [x] Создать `src/services/database/migrations/migration.ts`:
   ```typescript
   export interface Migration {
     version: number;
@@ -365,7 +365,7 @@
   ```
   **Зачем:** Тип для миграций
 
-- [ ] Создать `src/services/database/migrations/001_initial_schema.ts`:
+- [x] Создать `src/services/database/migrations/001_initial_schema.ts`:
   ```typescript
   import { Migration } from './migration';
   import { schema } from '../schema';
@@ -385,7 +385,7 @@
   ```
   **Зачем:** Первая миграция для создания схемы
 
-- [ ] Создать `src/services/database/migrations/index.ts`:
+- [x] Создать `src/services/database/migrations/index.ts`:
   ```typescript
   import { migration001 } from './001_initial_schema';
   
@@ -393,7 +393,7 @@
   ```
   **Зачем:** Реестр всех миграций
 
-- [ ] Создать таблицу версий в `src/services/database/migrations/000_create_migrations_table.ts`:
+- [x] Создать таблицу версий в `src/services/database/migrations/000_create_migrations_table.ts`:
   ```typescript
   export const createMigrationsTable = `
     CREATE TABLE IF NOT EXISTS migrations (
@@ -404,7 +404,7 @@
   ```
   **Зачем:** Отслеживание примененных миграций
 
-- [ ] Реализовать систему миграций в `src/services/database/db.ts`:
+- [x] Реализовать систему миграций в `src/services/database/db.ts`:
   ```typescript
   async runMigrations(): Promise<void> {
     // Проверка текущей версии
@@ -417,7 +417,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Реализовать метод `initialize()` в `src/services/database/db.ts`:
+- [x] Реализовать метод `initialize()` в `src/services/database/db.ts`:
   ```typescript
   async initialize(): Promise<void> {
     const sqlite = new SQLiteConnection(CapacitorSQLite);
@@ -431,7 +431,7 @@
   ```
   **Зачем:** Инициализация БД при запуске приложения
 
-- [ ] Создать функцию для заполнения предустановленными категориями:
+- [x] Создать функцию для заполнения предустановленными категориями:
   ```typescript
   async seedDefaultCategories(): Promise<void> {
     // Вставка предустановленных категорий расходов
@@ -447,7 +447,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/shared/lib/utils.ts` с функцией `cn()`:
+- [x] Создать `src/shared/lib/utils.ts` с функцией `cn()`:
   ```typescript
   import { clsx, type ClassValue } from "clsx";
   import { twMerge } from "tailwind-merge";
@@ -458,7 +458,7 @@
   ```
   **Зачем:** Утилита для объединения классов Tailwind
 
-- [ ] Создать `src/shared/utils/date/dateUtils.ts`:
+- [x] Создать `src/shared/utils/date/dateUtils.ts`:
   ```typescript
   import { format, parseISO } from 'date-fns';
   import { ru } from 'date-fns/locale';
@@ -477,7 +477,7 @@
   ```
   **Зачем:** Утилиты для работы с датами
 
-- [ ] Создать `src/shared/utils/currency/currencyUtils.ts`:
+- [x] Создать `src/shared/utils/currency/currencyUtils.ts`:
   ```typescript
   export const formatCurrency = (amount: number): string => {
     // Форматирование суммы в валюту (₽)
@@ -489,7 +489,7 @@
   ```
   **Зачем:** Утилиты для работы с валютами
 
-- [ ] Создать `src/shared/utils/validation/validationUtils.ts`:
+- [x] Создать `src/shared/utils/validation/validationUtils.ts`:
   ```typescript
   export const validateAmount = (value: string): boolean => {
     // Валидация суммы
@@ -501,7 +501,7 @@
   ```
   **Зачем:** Утилиты для валидации форм
 
-- [ ] Создать `src/shared/utils/id/idUtils.ts`:
+- [x] Создать `src/shared/utils/id/idUtils.ts`:
   ```typescript
   export const generateId = (): string => {
     // Генерация уникального ID (UUID или timestamp-based)
@@ -514,7 +514,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/shared/types/common.types.ts`:
+- [x] Создать `src/shared/types/common.types.ts`:
   ```typescript
   export interface BaseEntity {
     id: string;
@@ -524,7 +524,7 @@
   ```
   **Зачем:** Базовый тип для всех сущностей
 
-- [ ] Создать `src/shared/types/database.types.ts`:
+- [x] Создать `src/shared/types/database.types.ts`:
   ```typescript
   export interface DatabaseRow {
     [key: string]: any;
@@ -536,49 +536,49 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/shared/components/ui/button.tsx`:
+- [x] Создать `src/shared/components/ui/button.tsx`:
   ```typescript
   // Компонент Button из shadcn/ui
   ```
   **Зачем:** Кнопка для действий
 
-- [ ] Создать `src/shared/components/ui/input.tsx`:
+- [x] Создать `src/shared/components/ui/input.tsx`:
   ```typescript
   // Компонент Input из shadcn/ui
   ```
   **Зачем:** Поле ввода
 
-- [ ] Создать `src/shared/components/ui/card.tsx`:
+- [x] Создать `src/shared/components/ui/card.tsx`:
   ```typescript
   // Компонент Card из shadcn/ui
   ```
   **Зачем:** Карточка для отображения данных
 
-- [ ] Создать `src/shared/components/ui/dialog.tsx`:
+- [x] Создать `src/shared/components/ui/dialog.tsx`:
   ```typescript
   // Компонент Dialog из shadcn/ui
   ```
   **Зачем:** Модальное окно для форм
 
-- [ ] Создать `src/shared/components/ui/select.tsx`:
+- [x] Создать `src/shared/components/ui/select.tsx`:
   ```typescript
   // Компонент Select из shadcn/ui
   ```
   **Зачем:** Выпадающий список
 
-- [ ] Создать `src/shared/components/ui/label.tsx`:
+- [x] Создать `src/shared/components/ui/label.tsx`:
   ```typescript
   // Компонент Label из shadcn/ui
   ```
   **Зачем:** Метка для полей формы
 
-- [ ] Создать `src/shared/components/ui/calendar.tsx`:
+- [x] Создать `src/shared/components/ui/calendar.tsx`:
   ```typescript
   // Компонент Calendar из shadcn/ui
   ```
   **Зачем:** Календарь для выбора даты
 
-- [ ] Создать `src/shared/components/ui/checkbox.tsx`:
+- [x] Создать `src/shared/components/ui/checkbox.tsx`:
   ```typescript
   // Компонент Checkbox из shadcn/ui
   ```

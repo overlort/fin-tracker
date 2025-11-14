@@ -1,0 +1,6 @@
+export const createMigrationsTable = `
+  CREATE TABLE IF NOT EXISTS migrations (
+    version INTEGER PRIMARY KEY,
+    applied_at INTEGER NOT NULL
+  );
+`;
