@@ -43,16 +43,8 @@ export const DatabaseProvider: React.FC<DatabaseProviderProps> = ({ children }) 
   };
 
   useEffect(() => {
-    // Проверяем, запущено ли приложение в Capacitor
-    const isCapacitor = typeof window !== 'undefined' && (window as any).Capacitor;
-    
-    if (isCapacitor) {
-      initialize();
-    } else {
-      // В обычном браузере SQLite не работает, показываем предупреждение
-      setError('SQLite работает только в Capacitor окружении. Используйте Capacitor dev server или мобильное приложение.');
-      setIsInitializing(false);
-    }
+    // Всегда пытаемся инициализировать - в браузере будет использован мок
+    initialize();
   }, []);
 
   return (

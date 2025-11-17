@@ -2,6 +2,7 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
 import { createMigrationsTable } from './migrations/000_create_migrations_table';
 import { migrations } from './migrations';
+import { mockDatabaseService } from './db.mock';
 
 class DatabaseService {
   private db: SQLiteDBConnection | null = null;
@@ -113,9 +114,24 @@ class DatabaseService {
   }
 
   /**
+   * Проверка, доступен ли Capacitor
+   */
+  private isCapacitorAvailable(): boolean {
+    return typeof window !== 'undefined' && 
+           (window as any).Capacitor !== undefined &&
+           (window as any).Capacitor.isNativePlatform();
+  }
+
+  /**
    * Инициализация базы данных
    */
   async initialize(): Promise<void> {
+    // Если Capacitor недоступен (браузер), используем мок
+    if (!this.isCapacitorAvailable()) {
+      console.log('🔧 Используется мок БД для разработки в браузере');
+      return mockDatabaseService.initialize();
+    }
+
     try {
       this.sqlite = new SQLiteConnection(CapacitorSQLite);
 
@@ -154,6 +170,11 @@ class DatabaseService {
    * Получение соединения с БД
    */
   async getConnection(): Promise<SQLiteDBConnection> {
+    // Если Capacitor недоступен, используем мок
+    if (!this.isCapacitorAvailable()) {
+      return mockDatabaseService.getConnection();
+    }
+
     if (!this.db) {
       throw new Error('Database not initialized. Call initialize() first.');
     }
@@ -164,6 +185,11 @@ class DatabaseService {
    * Закрытие соединения с БД
    */
   async close(): Promise<void> {
+    // Если Capacitor недоступен, используем мок
+    if (!this.isCapacitorAvailable()) {
+      return mockDatabaseService.close();
+    }
+
     if (this.db && this.sqlite) {
       try {
         await this.sqlite.closeConnection(this.dbName, false);

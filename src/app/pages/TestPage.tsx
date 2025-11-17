@@ -116,6 +116,14 @@ export const TestPage: React.FC = () => {
           <p className="text-sm text-muted-foreground mt-1">
             Платформа: {typeof window !== 'undefined' && (window as any).Capacitor?.getPlatform() || 'Web'}
           </p>
+          {typeof window !== 'undefined' && !(window as any).Capacitor && (
+            <div className="mt-2 p-2 bg-blue-50 rounded text-sm">
+              <p className="text-blue-800 font-semibold">🔧 Режим разработки</p>
+              <p className="text-blue-600 mt-1">
+                Используется мок БД (localStorage). Данные сохраняются между перезагрузками страницы.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

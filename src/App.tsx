@@ -1,13 +1,13 @@
 import React from 'react';
-import { DatabaseProvider } from './app/providers/DatabaseProvider';
+import { AppProvider } from './app/providers/AppProvider';
 import { TestPage } from './app/pages/TestPage';
 import './App.css';
 
 function App() {
   return (
-    <DatabaseProvider>
+    <AppProvider>
       <TestPage />
-    </DatabaseProvider>
+    </AppProvider>
   );
 }
 

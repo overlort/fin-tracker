@@ -588,19 +588,13 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/shared/components/layout/Header.tsx`:
-  ```typescript
-  // Заголовок приложения
-  ```
-  **Зачем:** Навигация и заголовок
-
-- [ ] Создать `src/shared/components/layout/BottomNavigation.tsx`:
+- [x] Создать `src/shared/components/layout/BottomNavigation.tsx`:
   ```typescript
   // Нижняя навигация для мобильного приложения
   ```
   **Зачем:** Навигация между основными разделами
 
-- [ ] Создать `src/shared/components/layout/PageLayout.tsx`:
+- [?] Создать `src/shared/components/layout/PageLayout.tsx`:
   ```typescript
   // Обертка для страниц
   ```
@@ -610,7 +604,7 @@
 
 **Приоритет:** Высокий
 
-- [ ] Создать `src/app/providers/DatabaseProvider.tsx`:
+- [x] Создать `src/app/providers/DatabaseProvider.tsx`:
   ```typescript
   interface DatabaseContextType {
     isInitialized: boolean;
@@ -624,7 +618,7 @@
   ```
   **Зачем:** Глобальный доступ к состоянию БД
 
-- [ ] Создать `src/app/providers/AppProvider.tsx`:
+- [x] Создать `src/app/providers/AppProvider.tsx`:
   ```typescript
   export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     // Объединение всех провайдеров
