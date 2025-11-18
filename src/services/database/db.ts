@@ -1,165 +1,121 @@
-import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
-import { createMigrationsTable } from './migrations/000_create_migrations_table';
-import { migrations } from './migrations';
-import { mockDatabaseService } from './db.mock';
+import Dexie, { Table } from 'dexie';
+import { generateId } from '@/shared/utils/id/idUtils';
 
+// Типы данных
+export interface Account {
+  id: string;
+  name: string;
+  type: 'checking' | 'savings' | 'credit' | 'cash';
+  balance: number;
+  color: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Expense {
+  id: string;
+  amount: number;
+  description: string;
+  category_id: string | null;
+  date: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Income {
+  id: string;
+  amount: number;
+  date: number;
+  description: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface RecurringExpense {
+  id: string;
+  amount: number;
+  description: string;
+  name: string | null;
+  frequency: 'weekly' | 'monthly' | 'yearly' | null;
+  category: string | null;
+  account_id: string | null;
+  date: number;
+  is_completed: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Goal {
+  id: string;
+  target_amount: number;
+  current_amount: number;
+  deadline: number | null;
+  is_completed: number;
+  account_id: string | null;
+  description: string | null;
+  name: string | null;
+  color: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  icon: string | null;
+  color: string | null;
+  is_default: number;
+  created_at: number;
+}
+
+// Класс базы данных Dexie
+class FinanceDatabase extends Dexie {
+  accounts!: Table<Account>;
+  expenses!: Table<Expense>;
+  income!: Table<Income>;
+  recurring_expenses!: Table<RecurringExpense>;
+  goals!: Table<Goal>;
+  categories!: Table<Category>;
+
+  constructor() {
+    super('FinanceTracker');
+    
+    // Версия 1 - начальная схема
+    this.version(1).stores({
+      accounts: 'id, name, type, created_at',
+      expenses: 'id, date, category_id, created_at',
+      income: 'id, date, created_at',
+      recurring_expenses: 'id, date, account_id, is_completed, created_at',
+      goals: 'id, deadline, account_id, is_completed, created_at',
+      categories: 'id, name, is_default, created_at'
+    });
+  }
+}
+
+// Создаем экземпляр БД
+const db = new FinanceDatabase();
+
+// Сервис для работы с БД
 class DatabaseService {
-  private db: SQLiteDBConnection | null = null;
-  private dbName = 'fin_tracker.db';
-  private sqlite: SQLiteConnection | null = null;
-
-  /**
-   * Генерация уникального ID
-   */
-  private generateId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
-  }
-
-  /**
-   * Получение текущей версии БД
-   */
-  private async getCurrentVersion(): Promise<number> {
-    if (!this.db) {
-      throw new Error('Database not initialized');
-    }
-
-    try {
-      const result = await this.db.query('SELECT MAX(version) as version FROM migrations');
-      if (result.values && result.values.length > 0 && result.values[0].version !== null) {
-        return result.values[0].version as number;
-      }
-      return 0;
-    } catch (error) {
-      // Таблица миграций еще не создана
-      return 0;
-    }
-  }
-
-  /**
-   * Применение миграций
-   */
-  private async runMigrations(): Promise<void> {
-    if (!this.db) {
-      throw new Error('Database not initialized');
-    }
-
-    // Создаем таблицу миграций, если её нет
-    await this.db.run(createMigrationsTable, []);
-
-    const currentVersion = await this.getCurrentVersion();
-    const pendingMigrations = migrations.filter(m => m.version > currentVersion);
-
-    if (pendingMigrations.length === 0) {
-      return;
-    }
-
-    // Сортируем миграции по версии
-    pendingMigrations.sort((a, b) => a.version - b.version);
-
-    for (const migration of pendingMigrations) {
-      try {
-        await migration.up(this.db);
-        
-        // Записываем примененную миграцию
-        const appliedAt = Date.now();
-        await this.db.run(
-          'INSERT INTO migrations (version, applied_at) VALUES (?, ?)',
-          [migration.version, appliedAt]
-        );
-      } catch (error) {
-        console.error(`Error applying migration ${migration.version}:`, error);
-        throw error;
-      }
-    }
-  }
-
-  /**
-   * Заполнение предустановленными категориями
-   */
-  private async seedDefaultCategories(): Promise<void> {
-    if (!this.db) {
-      throw new Error('Database not initialized');
-    }
-
-    // Проверяем, есть ли уже категории
-    const result = await this.db.query('SELECT COUNT(*) as count FROM categories WHERE is_default = 1');
-    const count = result.values && result.values.length > 0 ? (result.values[0].count as number) : 0;
-
-    if (count > 0) {
-      // Категории уже заполнены
-      return;
-    }
-
-    const now = Date.now();
-    const defaultCategories = [
-      { name: 'Продукты', icon: '🍔', color: '#FF6B6B' },
-      { name: 'Транспорт', icon: '🚗', color: '#4ECDC4' },
-      { name: 'Развлечения', icon: '🎬', color: '#95E1D3' },
-      { name: 'Здоровье', icon: '💊', color: '#F38181' },
-      { name: 'Одежда', icon: '👕', color: '#AA96DA' },
-      { name: 'Жилье', icon: '🏠', color: '#FCBAD3' },
-      { name: 'Образование', icon: '📚', color: '#A8E6CF' },
-      { name: 'Прочее', icon: '📦', color: '#DDA0DD' },
-    ];
-
-    for (const category of defaultCategories) {
-      const id = this.generateId();
-      await this.db.run(
-        `INSERT INTO categories (id, name, icon, color, is_default, created_at) 
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [id, category.name, category.icon, category.color, 1, now]
-      );
-    }
-  }
-
-  /**
-   * Проверка, доступен ли Capacitor
-   */
-  private isCapacitorAvailable(): boolean {
-    return typeof window !== 'undefined' && 
-           (window as any).Capacitor !== undefined &&
-           (window as any).Capacitor.isNativePlatform();
-  }
+  private initialized = false;
 
   /**
    * Инициализация базы данных
    */
   async initialize(): Promise<void> {
-    // Если Capacitor недоступен (браузер), используем мок
-    if (!this.isCapacitorAvailable()) {
-      console.log('🔧 Используется мок БД для разработки в браузере');
-      return mockDatabaseService.initialize();
+    if (this.initialized) {
+      return;
     }
 
     try {
-      this.sqlite = new SQLiteConnection(CapacitorSQLite);
-
-      // Проверяем, существует ли соединение
-      const isConn = (await this.sqlite.isConnection(this.dbName, false)).result;
-
-      if (!isConn) {
-        // Создаем новое соединение
-        this.db = await this.sqlite.createConnection(
-          this.dbName,
-          false,
-          'no-encryption',
-          1,
-          false
-        );
-      } else {
-        // Открываем существующее соединение
-        this.db = await this.sqlite.retrieveConnection(this.dbName, false);
-      }
-
-      // Открываем БД
-      await this.db.open();
-
-      // Применяем миграции
-      await this.runMigrations();
-
-      // Заполняем предустановленными категориями
+      // Открываем БД (Dexie автоматически создаст структуру)
+      await db.open();
+      
+      // Заполняем предустановленными категориями, если их нет
       await this.seedDefaultCategories();
+      
+      this.initialized = true;
+      console.log('✅ IndexedDB initialized');
     } catch (error) {
       console.error('Error initializing database:', error);
       throw error;
@@ -167,39 +123,49 @@ class DatabaseService {
   }
 
   /**
-   * Получение соединения с БД
+   * Заполнение предустановленными категориями
    */
-  async getConnection(): Promise<SQLiteDBConnection> {
-    // Если Capacitor недоступен, используем мок
-    if (!this.isCapacitorAvailable()) {
-      return mockDatabaseService.getConnection();
+  private async seedDefaultCategories(): Promise<void> {
+    const count = await db.categories.where('is_default').equals(1).count();
+    
+    if (count > 0) {
+      // Категории уже заполнены
+      return;
     }
 
-    if (!this.db) {
+    const now = Date.now();
+    const defaultCategories: Category[] = [
+      { id: generateId(), name: 'Продукты', icon: '🍔', color: '#FF6B6B', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Транспорт', icon: '🚗', color: '#4ECDC4', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Развлечения', icon: '🎬', color: '#95E1D3', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Здоровье', icon: '💊', color: '#F38181', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Одежда', icon: '👕', color: '#AA96DA', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Жилье', icon: '🏠', color: '#FCBAD3', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Образование', icon: '📚', color: '#A8E6CF', is_default: 1, created_at: now },
+      { id: generateId(), name: 'Прочее', icon: '📦', color: '#DDA0DD', is_default: 1, created_at: now },
+    ];
+
+    await db.categories.bulkAdd(defaultCategories);
+  }
+
+  /**
+   * Получение экземпляра БД
+   */
+  getDatabase(): FinanceDatabase {
+    if (!this.initialized) {
       throw new Error('Database not initialized. Call initialize() first.');
     }
-    return this.db;
+    return db;
   }
 
   /**
    * Закрытие соединения с БД
    */
   async close(): Promise<void> {
-    // Если Capacitor недоступен, используем мок
-    if (!this.isCapacitorAvailable()) {
-      return mockDatabaseService.close();
-    }
-
-    if (this.db && this.sqlite) {
-      try {
-        await this.sqlite.closeConnection(this.dbName, false);
-        this.db = null;
-      } catch (error) {
-        console.error('Error closing database:', error);
-        throw error;
-      }
-    }
+    await db.close();
+    this.initialized = false;
   }
 }
 
 export const databaseService = new DatabaseService();
+export { db };

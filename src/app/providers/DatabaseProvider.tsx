@@ -43,7 +43,7 @@ export const DatabaseProvider: React.FC<DatabaseProviderProps> = ({ children }) 
   };
 
   useEffect(() => {
-    // Всегда пытаемся инициализировать - в браузере будет использован мок
+    // Инициализируем IndexedDB при монтировании
     initialize();
   }, []);
 

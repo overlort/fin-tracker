@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# Finance Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Приложение для учета личных финансов с офлайн-режимом.
 
-## Available Scripts
+## 🚀 Технологии
 
-In the project directory, you can run:
+- **React 19** + **TypeScript**
+- **IndexedDB** (Dexie.js) для хранения данных
+- **Tailwind CSS** + **shadcn/ui** для UI
+- **Capacitor** для iOS
+- **PWA** готовность
 
-### `npm start`
+## 📁 Структура проекта
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Подробное описание структуры проекта смотрите в [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Кратко:
 
-### `npm test`
+```
+src/
+├── App.tsx                 # Главный компонент (навигация, layout)
+├── app/
+│   ├── components/         # Страницы приложения (Dashboard, Accounts, etc.)
+│   └── providers/         # Context провайдеры (FinanceDataProvider, DatabaseProvider)
+├── shared/
+│   ├── components/ui/     # UI компоненты (Button, Card, Dialog, etc.)
+│   └── utils/             # Утилиты (id, date, currency, validation)
+├── services/
+│   └── database/          # Работа с IndexedDB
+└── features/              # Доменные фичи (пока пусто, для будущего расширения)
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🎯 Основные файлы
 
-### `npm run build`
+- **`src/App.tsx`** - главный компонент, управляет навигацией
+- **`src/app/components/`** - страницы приложения
+- **`src/app/providers/FinanceDataProvider.tsx`** - провайдер данных (accounts, transactions, goals, recurring)
+- **`src/services/database/db.ts`** - работа с IndexedDB
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📖 Документация
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) - подробная структура проекта
+- [PWA_AND_STORAGE.md](./PWA_AND_STORAGE.md) - информация о PWA и хранении данных
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Команды
 
-### `npm run eject`
+```bash
+npm start      # Запуск в режиме разработки
+npm run build  # Сборка для продакшена
+npm test       # Запуск тестов
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 📱 PWA
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Приложение готово к использованию как PWA:
+- Работает офлайн
+- Можно установить на устройство
+- Данные хранятся локально в IndexedDB
