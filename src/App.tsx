@@ -13,10 +13,10 @@ const AppContent: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   const tabs = [
-    { id: 'dashboard', label: 'Home', icon: Home, component: Dashboard },
-    { id: 'accounts', label: 'Accounts', icon: Wallet, component: Accounts },
-    { id: 'recurring', label: 'Recurring', icon: Repeat, component: Recurring },
-    { id: 'goals', label: 'Goals', icon: Target, component: Goals },
+    { id: 'dashboard', label: 'Главная', icon: Home, component: Dashboard },
+    { id: 'accounts', label: 'Счета', icon: Wallet, component: Accounts },
+    { id: 'recurring', label: 'Повторяющиеся', icon: Repeat, component: Recurring },
+    { id: 'goals', label: 'Цели', icon: Target, component: Goals },
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || Dashboard;
@@ -27,13 +27,13 @@ const AppContent: React.FC = () => {
         <div className="max-w-md mx-auto">
           {/* Header */}
           <header className="bg-card border-b border-border px-4 py-4 sticky top-0 z-10 flex items-center justify-between">
-            <h1 className="text-foreground font-semibold">Finance Tracker</h1>
+            <h1 className="text-foreground font-semibold">Учет Финансов</h1>
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
               className="h-8 w-8"
-              aria-label="Toggle theme"
+              aria-label="Переключить тему"
             >
               {theme === 'dark' ? (
                 <Sun className="h-5 w-5" />

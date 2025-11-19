@@ -27,12 +27,12 @@ export const Goals: React.FC = () => {
   });
 
   const goalColors = [
-    { value: '#64748b', label: 'Slate' },
-    { value: '#3b82f6', label: 'Blue' },
-    { value: '#10b981', label: 'Green' },
-    { value: '#f59e0b', label: 'Orange' },
-    { value: '#8b5cf6', label: 'Purple' },
-    { value: '#ec4899', label: 'Pink' },
+    { value: '#64748b', label: 'Серый' },
+    { value: '#3b82f6', label: 'Синий' },
+    { value: '#10b981', label: 'Зеленый' },
+    { value: '#f59e0b', label: 'Оранжевый' },
+    { value: '#8b5cf6', label: 'Фиолетовый' },
+    { value: '#ec4899', label: 'Розовый' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,15 +90,15 @@ export const Goals: React.FC = () => {
       <Card className="p-6 border-border">
         <div className="flex items-center gap-2 mb-2">
           <Target className="w-5 h-5 text-muted-foreground" />
-          <p className="text-muted-foreground">Total Saved</p>
+          <p className="text-muted-foreground">Всего накоплено</p>
         </div>
-        <h2 className="text-foreground">${totalSaved.toFixed(2)}</h2>
+        <h2 className="text-foreground">₽{totalSaved.toFixed(2)}</h2>
         <Progress 
           value={totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0} 
           className="mt-3 h-2"
         />
         <p className="text-sm text-muted-foreground/70 mt-2">
-          ${totalTarget.toFixed(2)} target across {goals.length} goal{goals.length !== 1 ? 's' : ''}
+          ₽{totalTarget.toFixed(2)} цель в {goals.length} {goals.length === 1 ? 'цели' : goals.length < 5 ? 'целях' : 'целях'}
         </p>
       </Card>
 
@@ -107,8 +107,8 @@ export const Goals: React.FC = () => {
         {goals.length === 0 ? (
           <Card className="p-8 text-center border-border">
             <Target className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
-            <p className="text-muted-foreground">No savings goals yet</p>
-            <p className="text-sm text-muted-foreground/70 mt-2">Create a goal to start saving</p>
+            <p className="text-muted-foreground">Пока нет целей накопления</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Создайте цель, чтобы начать копить</p>
           </Card>
         ) : (
           goals
@@ -133,7 +133,7 @@ export const Goals: React.FC = () => {
                         <p className="text-foreground">{goal.name}</p>
                         <div className="flex gap-2 mt-1">
                           <Badge variant="secondary" className="bg-muted text-muted-foreground">
-                            {daysRemaining > 0 ? `${daysRemaining} days left` : goal.deadline ? 'Overdue' : 'No deadline'}
+                            {daysRemaining > 0 ? `Осталось ${daysRemaining} ${daysRemaining === 1 ? 'день' : daysRemaining < 5 ? 'дня' : 'дней'}` : goal.deadline ? 'Просрочено' : 'Без дедлайна'}
                           </Badge>
                         </div>
                       </div>
@@ -144,14 +144,14 @@ export const Goals: React.FC = () => {
                         onClick={() => setContributionDialog({ open: true, goalId: goal.id, amount: '' })}
                       >
                         <TrendingUp className="w-3 h-3 mr-1" />
-                        Add
+                        Добавить
                       </Button>
                     </div>
                     
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-muted-foreground">
-                          ${goal.current.toFixed(2)} / ${goal.target.toFixed(2)}
+                          ₽{goal.current.toFixed(2)} / ₽{goal.target.toFixed(2)}
                         </span>
                         <span className="text-sm text-muted-foreground">{progress.toFixed(0)}%</span>
                       </div>
@@ -175,18 +175,18 @@ export const Goals: React.FC = () => {
         <DialogTrigger asChild>
           <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
-            Add Savings Goal
+            Добавить цель накопления
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>New Savings Goal</DialogTitle>
+            <DialogTitle>Новая цель накопления</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label>Goal Name</Label>
+              <Label>Название цели</Label>
               <Input
-                placeholder="e.g., Emergency Fund"
+                placeholder="Например, Резервный фонд"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -194,7 +194,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <div>
-              <Label>Target Amount</Label>
+              <Label>Целевая сумма</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -206,7 +206,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <div>
-              <Label>Current Amount</Label>
+              <Label>Текущая сумма</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -217,7 +217,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <div>
-              <Label>Deadline</Label>
+              <Label>Дедлайн</Label>
               <Input
                 type="date"
                 value={formData.deadline}
@@ -227,7 +227,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <div>
-              <Label>Color</Label>
+              <Label>Цвет</Label>
               <div className="grid grid-cols-6 gap-2 mt-2">
                 {goalColors.map((color) => (
                   <button
@@ -245,7 +245,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Add Goal
+              Добавить цель
             </Button>
           </form>
         </DialogContent>
@@ -255,11 +255,11 @@ export const Goals: React.FC = () => {
       <Dialog open={contributionDialog.open} onOpenChange={(open) => setContributionDialog({ ...contributionDialog, open })}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Add Contribution</DialogTitle>
+            <DialogTitle>Добавить взнос</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleContribution} className="space-y-4">
             <div>
-              <Label>Amount</Label>
+              <Label>Сумма</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -272,7 +272,7 @@ export const Goals: React.FC = () => {
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Add Contribution
+              Добавить взнос
             </Button>
           </form>
         </DialogContent>

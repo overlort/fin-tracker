@@ -1,7 +1,16 @@
 import { useState, useMemo } from 'react';
 import { Card } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
-import { TrendingUp, TrendingDown, DollarSign, PiggyBank, Plus, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  PiggyBank,
+  Plus,
+  ArrowUpRight,
+  ArrowDownLeft,
+  RussianRuble
+} from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
@@ -25,8 +34,8 @@ export const Dashboard: React.FC = () => {
   });
 
   const categories = {
-    income: ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'],
-    expense: ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Healthcare', 'Other'],
+    income: ['Зарплата', 'Фриланс', 'Инвестиции', 'Подарок', 'Прочее'],
+    expense: ['Еда', 'Транспорт', 'Покупки', 'Счета', 'Развлечения', 'Здоровье', 'Прочее'],
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -79,7 +88,7 @@ export const Dashboard: React.FC = () => {
 
   // Last 6 months data
   const chartData = useMemo(() => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
     const data = [];
     
     for (let i = 5; i >= 0; i--) {
@@ -120,22 +129,22 @@ export const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Balance Card */}
       <Card className="bg-primary text-primary-foreground p-6 border-0">
-        <p className="text-primary-foreground/80 mb-2">Total Balance</p>
-        <h2 className="text-primary-foreground mb-4">${totalBalance.toFixed(2)}</h2>
+        <p className="text-primary-foreground/80 mb-2">Общий баланс</p>
+        <h2 className="text-primary-foreground mb-4">₽{totalBalance.toFixed(2)}</h2>
         <div className="flex gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
               <TrendingUp className="w-4 h-4" />
-              <span className="text-sm">Income</span>
+              <span className="text-sm">Доходы</span>
             </div>
-            <p className="text-green-400">${monthlyIncome.toFixed(2)}</p>
+            <p className="text-green-400">₽{monthlyIncome.toFixed(2)}</p>
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
               <TrendingDown className="w-4 h-4" />
-              <span className="text-sm">Expenses</span>
+              <span className="text-sm">Расходы</span>
             </div>
-            <p className="text-red-400">${monthlyExpenses.toFixed(2)}</p>
+            <p className="text-red-400">₽{monthlyExpenses.toFixed(2)}</p>
           </div>
         </div>
       </Card>
@@ -145,12 +154,12 @@ export const Dashboard: React.FC = () => {
         <Card className="p-4 border-border">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-muted rounded-lg">
-              <DollarSign className="w-5 h-5 text-muted-foreground" />
+              <RussianRuble className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">This Month</p>
+              <p className="text-sm text-muted-foreground">Этот месяц</p>
               <p className={`${monthlyIncome - monthlyExpenses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${(monthlyIncome - monthlyExpenses).toFixed(2)}
+                ₽{(monthlyIncome - monthlyExpenses).toFixed(2)}
               </p>
             </div>
           </div>
@@ -161,8 +170,8 @@ export const Dashboard: React.FC = () => {
               <PiggyBank className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Saved</p>
-              <p className="text-foreground">${totalSaved.toFixed(2)}</p>
+              <p className="text-sm text-muted-foreground">Накоплено</p>
+              <p className="text-foreground">₽{totalSaved.toFixed(2)}</p>
             </div>
           </div>
         </Card>
@@ -170,7 +179,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Chart */}
       <Card className="p-4 border-border">
-        <h3 className="text-foreground mb-4">Cash Flow (Last 6 Months)</h3>
+        <h3 className="text-foreground mb-4">Денежный поток (Последние 6 месяцев)</h3>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={chartData}>
             <XAxis 
@@ -183,7 +192,7 @@ export const Dashboard: React.FC = () => {
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#4f6d4b', fontSize: 12 }}
-              tickFormatter={(value) => `$${value}`}
+              tickFormatter={(value) => `₽${value}`}
             />
             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
               {chartData.map((entry, index) => (
@@ -196,7 +205,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Transactions Section */}
       <div>
-        <h3 className="text-foreground mb-3">Transactions</h3>
+        <h3 className="text-foreground mb-3">Транзакции</h3>
         
         {/* Filter */}
         <div className="flex gap-2 mb-4">
@@ -205,21 +214,21 @@ export const Dashboard: React.FC = () => {
             onClick={() => setFilter('all')}
             className={filter === 'all' ? 'bg-primary text-primary-foreground' : ''}
           >
-            All
+            Все
           </Button>
           <Button
             variant={filter === 'income' ? 'default' : 'outline'}
             onClick={() => setFilter('income')}
             className={filter === 'income' ? 'bg-primary text-primary-foreground' : ''}
           >
-            Income
+            Доходы
           </Button>
           <Button
             variant={filter === 'expense' ? 'default' : 'outline'}
             onClick={() => setFilter('expense')}
             className={filter === 'expense' ? 'bg-primary text-primary-foreground' : ''}
           >
-            Expenses
+            Расходы
           </Button>
         </div>
 
@@ -227,8 +236,8 @@ export const Dashboard: React.FC = () => {
         <div className="space-y-3">
           {filteredTransactions.length === 0 ? (
             <Card className="p-8 text-center border-border">
-              <p className="text-muted-foreground">No transactions yet</p>
-              <p className="text-sm text-muted-foreground/70 mt-2">Add your first transaction below</p>
+              <p className="text-muted-foreground">Пока нет транзакций</p>
+              <p className="text-sm text-muted-foreground/70 mt-2">Добавьте первую транзакцию ниже</p>
             </Card>
           ) : (
             filteredTransactions.map((transaction) => {
@@ -247,7 +256,7 @@ export const Dashboard: React.FC = () => {
                         )}
                       </div>
                       <div>
-                        <p className="text-foreground">{transaction.description || 'No description'}</p>
+                        <p className="text-foreground">{transaction.description || 'Без описания'}</p>
                         <div className="flex gap-2 mt-1">
                           <Badge variant="secondary" className="bg-muted text-muted-foreground">
                             {transaction.category}
@@ -262,12 +271,12 @@ export const Dashboard: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className={`${transaction.type === 'income' ? 'text-green-600' : 'text-foreground'}`}>
-                        {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                        {transaction.type === 'income' ? '+' : '-'}₽{transaction.amount.toFixed(2)}
                       </p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {new Date(transaction.date).toLocaleDateString('en-US', { 
-                          month: 'short', 
+                        {new Date(transaction.date).toLocaleDateString('ru-RU', { 
                           day: 'numeric',
+                          month: 'short', 
                           year: 'numeric'
                         })}
                       </p>
@@ -285,12 +294,12 @@ export const Dashboard: React.FC = () => {
         <DialogTrigger asChild>
           <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
-            Add Transaction
+            Добавить транзакцию
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>New Transaction</DialogTitle>
+            <DialogTitle>Новая транзакция</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
@@ -300,7 +309,7 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setFormData({ ...formData, type: 'expense', category: '' })}
                 className={formData.type === 'expense' ? 'bg-primary text-primary-foreground' : ''}
               >
-                Expense
+                Расход
               </Button>
               <Button
                 type="button"
@@ -308,12 +317,12 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setFormData({ ...formData, type: 'income', category: '' })}
                 className={formData.type === 'income' ? 'bg-primary text-primary-foreground' : ''}
               >
-                Income
+                Доход
               </Button>
             </div>
 
             <div>
-              <Label>Amount</Label>
+              <Label>Сумма</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -325,19 +334,19 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div>
-              <Label>Description (Optional)</Label>
+              <Label>Описание (необязательно)</Label>
               <Input
-                placeholder="Enter description"
+                placeholder="Введите описание"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
 
             <div>
-              <Label>Category</Label>
+              <Label>Категория</Label>
               <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories[formData.type].map((cat) => (
@@ -348,10 +357,10 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div>
-              <Label>Account</Label>
+              <Label>Счет</Label>
               <Select value={formData.accountId} onValueChange={(value) => setFormData({ ...formData, accountId: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select account" />
+                  <SelectValue placeholder="Выберите счет" />
                 </SelectTrigger>
                 <SelectContent>
                   {accounts.map((account) => (
@@ -362,7 +371,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div>
-              <Label>Date</Label>
+              <Label>Дата</Label>
               <Input
                 type="date"
                 value={formData.date}
@@ -372,7 +381,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Add Transaction
+              Добавить транзакцию
             </Button>
           </form>
         </DialogContent>

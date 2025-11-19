@@ -28,12 +28,12 @@ export const Accounts: React.FC = () => {
   };
 
   const accountColors = [
-    { value: '#64748b', label: 'Slate' },
-    { value: '#3b82f6', label: 'Blue' },
-    { value: '#10b981', label: 'Green' },
-    { value: '#f59e0b', label: 'Orange' },
-    { value: '#8b5cf6', label: 'Purple' },
-    { value: '#ec4899', label: 'Pink' },
+    { value: '#64748b', label: 'Серый' },
+    { value: '#3b82f6', label: 'Синий' },
+    { value: '#10b981', label: 'Зеленый' },
+    { value: '#f59e0b', label: 'Оранжевый' },
+    { value: '#8b5cf6', label: 'Фиолетовый' },
+    { value: '#ec4899', label: 'Розовый' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,9 +63,9 @@ export const Accounts: React.FC = () => {
     <div className="space-y-6">
       {/* Total Balance */}
       <Card className="p-6 border-border">
-        <p className="text-muted-foreground mb-2">Total Balance</p>
-        <h2 className="text-foreground">${totalBalance.toFixed(2)}</h2>
-        <p className="text-sm text-muted-foreground/70 mt-2">Across {accounts.length} account{accounts.length !== 1 ? 's' : ''}</p>
+        <p className="text-muted-foreground mb-2">Общий баланс</p>
+        <h2 className="text-foreground">₽{totalBalance.toFixed(2)}</h2>
+        <p className="text-sm text-muted-foreground/70 mt-2">В {accounts.length} {accounts.length === 1 ? 'счете' : accounts.length < 5 ? 'счетах' : 'счетах'}</p>
       </Card>
 
       {/* Accounts List */}
@@ -73,8 +73,8 @@ export const Accounts: React.FC = () => {
         {accounts.length === 0 ? (
           <Card className="p-8 text-center border-border">
             <Wallet className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
-            <p className="text-muted-foreground">No accounts yet</p>
-            <p className="text-sm text-muted-foreground/70 mt-2">Add your first account to get started</p>
+            <p className="text-muted-foreground">Пока нет счетов</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Добавьте первый счет, чтобы начать</p>
           </Card>
         ) : (
           accounts.map((account) => {
@@ -97,14 +97,14 @@ export const Accounts: React.FC = () => {
                       <p className="text-foreground">{account.name}</p>
                       <Badge 
                         variant="secondary" 
-                        className="mt-1 bg-muted text-muted-foreground capitalize"
+                        className="mt-1 bg-muted text-muted-foreground"
                       >
-                        {account.type}
+                        {account.type === 'checking' ? 'Расчетный' : account.type === 'savings' ? 'Накопительный' : account.type === 'credit' ? 'Кредитная карта' : 'Наличные'}
                       </Badge>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-foreground">${account.balance.toFixed(2)}</p>
+                    <p className="text-foreground">₽{account.balance.toFixed(2)}</p>
                   </div>
                 </div>
               </Card>
@@ -118,18 +118,18 @@ export const Accounts: React.FC = () => {
         <DialogTrigger asChild>
           <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
-            Add Account
+            Добавить счет
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>New Account</DialogTitle>
+            <DialogTitle>Новый счет</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label>Account Name</Label>
+              <Label>Название счета</Label>
               <Input
-                placeholder="e.g., Main Checking"
+                placeholder="Например, Основной расчетный"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -137,22 +137,22 @@ export const Accounts: React.FC = () => {
             </div>
 
             <div>
-              <Label>Account Type</Label>
+              <Label>Тип счета</Label>
               <Select value={formData.type} onValueChange={(value: any) => setFormData({ ...formData, type: value })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="checking">Checking</SelectItem>
-                  <SelectItem value="savings">Savings</SelectItem>
-                  <SelectItem value="credit">Credit Card</SelectItem>
-                  <SelectItem value="cash">Cash</SelectItem>
+                  <SelectItem value="checking">Расчетный</SelectItem>
+                  <SelectItem value="savings">Накопительный</SelectItem>
+                  <SelectItem value="credit">Кредитная карта</SelectItem>
+                  <SelectItem value="cash">Наличные</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label>Initial Balance</Label>
+              <Label>Начальный баланс</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -164,7 +164,7 @@ export const Accounts: React.FC = () => {
             </div>
 
             <div>
-              <Label>Color</Label>
+              <Label>Цвет</Label>
               <div className="grid grid-cols-6 gap-2 mt-2">
                 {accountColors.map((color) => (
                   <button
@@ -182,7 +182,7 @@ export const Accounts: React.FC = () => {
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Add Account
+              Добавить счет
             </Button>
           </form>
         </DialogContent>

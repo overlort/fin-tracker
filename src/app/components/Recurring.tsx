@@ -22,7 +22,7 @@ export const Recurring: React.FC = () => {
     nextDate: new Date().toISOString().split('T')[0],
   });
 
-  const categories = ['Rent', 'Utilities', 'Insurance', 'Subscriptions', 'Phone', 'Internet', 'Gym', 'Other'];
+  const categories = ['Аренда', 'Коммунальные', 'Страховка', 'Подписки', 'Телефон', 'Интернет', 'Спортзал', 'Прочее'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,10 +70,10 @@ export const Recurring: React.FC = () => {
       <Card className="p-6 border-border">
         <div className="flex items-center gap-2 mb-2">
           <ArrowDownLeft className="w-5 h-5 text-red-600" />
-          <p className="text-muted-foreground">Monthly Recurring</p>
+          <p className="text-muted-foreground">Ежемесячные платежи</p>
         </div>
-        <h2 className="text-foreground">${totalMonthly.toFixed(2)}</h2>
-        <p className="text-sm text-muted-foreground/70 mt-2">{recurring.length} active payment{recurring.length !== 1 ? 's' : ''}</p>
+        <h2 className="text-foreground">₽{totalMonthly.toFixed(2)}</h2>
+        <p className="text-sm text-muted-foreground/70 mt-2">{recurring.length} {recurring.length === 1 ? 'активный платеж' : recurring.length < 5 ? 'активных платежа' : 'активных платежей'}</p>
       </Card>
 
       {/* Recurring Payments List */}
@@ -81,8 +81,8 @@ export const Recurring: React.FC = () => {
         {recurring.length === 0 ? (
           <Card className="p-8 text-center border-border">
             <Calendar className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
-            <p className="text-muted-foreground">No recurring payments yet</p>
-            <p className="text-sm text-muted-foreground/70 mt-2">Add bills and subscriptions to track them</p>
+            <p className="text-muted-foreground">Пока нет повторяющихся платежей</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Добавьте счета и подписки для отслеживания</p>
           </Card>
         ) : (
           recurring
@@ -104,8 +104,8 @@ export const Recurring: React.FC = () => {
                           <Badge variant="secondary" className="bg-muted text-muted-foreground">
                             {payment.category}
                           </Badge>
-                          <Badge variant="outline" className="border-border text-muted-foreground capitalize">
-                            {payment.frequency}
+                          <Badge variant="outline" className="border-border text-muted-foreground">
+                            {payment.frequency === 'weekly' ? 'Еженедельно' : payment.frequency === 'monthly' ? 'Ежемесячно' : 'Ежегодно'}
                           </Badge>
                           {account && (
                             <Badge variant="outline" className="border-border text-muted-foreground">
@@ -116,9 +116,9 @@ export const Recurring: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-foreground">${payment.amount.toFixed(2)}</p>
+                      <p className="text-foreground">₽{payment.amount.toFixed(2)}</p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `In ${daysUntil} days`}
+                        {daysUntil === 0 ? 'Сегодня' : daysUntil === 1 ? 'Завтра' : daysUntil < 5 ? `Через ${daysUntil} дня` : `Через ${daysUntil} дней`}
                       </p>
                     </div>
                   </div>
@@ -133,18 +133,18 @@ export const Recurring: React.FC = () => {
         <DialogTrigger asChild>
           <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
-            Add Recurring Payment
+            Добавить повторяющийся платеж
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>New Recurring Payment</DialogTitle>
+            <DialogTitle>Новый повторяющийся платеж</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label>Payment Name</Label>
+              <Label>Название платежа</Label>
               <Input
-                placeholder="e.g., Netflix Subscription"
+                placeholder="Например, Подписка Netflix"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -152,7 +152,7 @@ export const Recurring: React.FC = () => {
             </div>
 
             <div>
-              <Label>Amount</Label>
+              <Label>Сумма</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -164,24 +164,24 @@ export const Recurring: React.FC = () => {
             </div>
 
             <div>
-              <Label>Frequency</Label>
+              <Label>Частота</Label>
               <Select value={formData.frequency} onValueChange={(value: any) => setFormData({ ...formData, frequency: value })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="weekly">Еженедельно</SelectItem>
+                  <SelectItem value="monthly">Ежемесячно</SelectItem>
+                  <SelectItem value="yearly">Ежегодно</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label>Category</Label>
+              <Label>Категория</Label>
               <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
@@ -192,10 +192,10 @@ export const Recurring: React.FC = () => {
             </div>
 
             <div>
-              <Label>Account</Label>
+              <Label>Счет</Label>
               <Select value={formData.accountId} onValueChange={(value) => setFormData({ ...formData, accountId: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select account" />
+                  <SelectValue placeholder="Выберите счет" />
                 </SelectTrigger>
                 <SelectContent>
                   {accounts.map((account) => (
@@ -206,7 +206,7 @@ export const Recurring: React.FC = () => {
             </div>
 
             <div>
-              <Label>Next Payment Date</Label>
+              <Label>Дата следующего платежа</Label>
               <Input
                 type="date"
                 value={formData.nextDate}
@@ -216,7 +216,7 @@ export const Recurring: React.FC = () => {
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Add Payment
+              Добавить платеж
             </Button>
           </form>
         </DialogContent>
