@@ -17,7 +17,7 @@ export const Accounts: React.FC = () => {
     name: '',
     type: 'checking' as 'checking' | 'savings' | 'credit' | 'cash',
     balance: '',
-    color: '#64748b',
+    color: '#95b99c',
   });
 
   const accountIcons = {
@@ -50,7 +50,7 @@ export const Accounts: React.FC = () => {
         name: '',
         type: 'checking',
         balance: '',
-        color: '#64748b',
+        color: '#95b99c',
       });
     } catch (error) {
       console.error('Error adding account:', error);
@@ -62,19 +62,19 @@ export const Accounts: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Total Balance */}
-      <Card className="p-6 border-slate-200">
-        <p className="text-slate-500 mb-2">Total Balance</p>
-        <h2 className="text-slate-800">${totalBalance.toFixed(2)}</h2>
-        <p className="text-sm text-slate-400 mt-2">Across {accounts.length} account{accounts.length !== 1 ? 's' : ''}</p>
+      <Card className="p-6 border-border">
+        <p className="text-muted-foreground mb-2">Total Balance</p>
+        <h2 className="text-foreground">${totalBalance.toFixed(2)}</h2>
+        <p className="text-sm text-muted-foreground/70 mt-2">Across {accounts.length} account{accounts.length !== 1 ? 's' : ''}</p>
       </Card>
 
       {/* Accounts List */}
       <div className="space-y-3">
         {accounts.length === 0 ? (
-          <Card className="p-8 text-center border-slate-200">
-            <Wallet className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500">No accounts yet</p>
-            <p className="text-sm text-slate-400 mt-2">Add your first account to get started</p>
+          <Card className="p-8 text-center border-border">
+            <Wallet className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+            <p className="text-muted-foreground">No accounts yet</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Add your first account to get started</p>
           </Card>
         ) : (
           accounts.map((account) => {
@@ -82,7 +82,7 @@ export const Accounts: React.FC = () => {
             return (
               <Card 
                 key={account.id} 
-                className="p-5 border-slate-200"
+                className="p-5 border-border"
                 style={{ borderLeftWidth: '4px', borderLeftColor: account.color }}
               >
                 <div className="flex items-center justify-between">
@@ -94,17 +94,17 @@ export const Accounts: React.FC = () => {
                       <Icon className="w-6 h-6" style={{ color: account.color }} />
                     </div>
                     <div>
-                      <p className="text-slate-800">{account.name}</p>
+                      <p className="text-foreground">{account.name}</p>
                       <Badge 
                         variant="secondary" 
-                        className="mt-1 bg-slate-100 text-slate-600 capitalize"
+                        className="mt-1 bg-muted text-muted-foreground capitalize"
                       >
                         {account.type}
                       </Badge>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-slate-800">${account.balance.toFixed(2)}</p>
+                    <p className="text-foreground">${account.balance.toFixed(2)}</p>
                   </div>
                 </div>
               </Card>
@@ -116,7 +116,7 @@ export const Accounts: React.FC = () => {
       {/* Add Account Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-slate-800 hover:bg-slate-700">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Account
           </Button>
@@ -171,7 +171,7 @@ export const Accounts: React.FC = () => {
                     key={color.value}
                     type="button"
                     className={`w-10 h-10 rounded-lg transition-all ${
-                      formData.color === color.value ? 'ring-2 ring-offset-2 ring-slate-400' : ''
+                      formData.color === color.value ? 'ring-2 ring-offset-2 ring-primary' : ''
                     }`}
                     style={{ backgroundColor: color.value }}
                     onClick={() => setFormData({ ...formData, color: color.value })}
@@ -181,7 +181,7 @@ export const Accounts: React.FC = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Account
             </Button>
           </form>

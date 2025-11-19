@@ -119,19 +119,19 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Balance Card */}
-      <Card className="bg-slate-800 text-white p-6 border-0">
-        <p className="text-slate-300 mb-2">Total Balance</p>
-        <h2 className="text-white mb-4">${totalBalance.toFixed(2)}</h2>
+      <Card className="bg-primary text-primary-foreground p-6 border-0">
+        <p className="text-primary-foreground/80 mb-2">Total Balance</p>
+        <h2 className="text-primary-foreground mb-4">${totalBalance.toFixed(2)}</h2>
         <div className="flex gap-4">
           <div className="flex-1">
-            <div className="flex items-center gap-2 text-slate-300 mb-1">
+            <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
               <TrendingUp className="w-4 h-4" />
               <span className="text-sm">Income</span>
             </div>
             <p className="text-green-400">${monthlyIncome.toFixed(2)}</p>
           </div>
           <div className="flex-1">
-            <div className="flex items-center gap-2 text-slate-300 mb-1">
+            <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
               <TrendingDown className="w-4 h-4" />
               <span className="text-sm">Expenses</span>
             </div>
@@ -142,47 +142,47 @@ export const Dashboard: React.FC = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <Card className="p-4 border-slate-200">
+        <Card className="p-4 border-border">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-slate-100 rounded-lg">
-              <DollarSign className="w-5 h-5 text-slate-600" />
+            <div className="p-2 bg-muted rounded-lg">
+              <DollarSign className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">This Month</p>
+              <p className="text-sm text-muted-foreground">This Month</p>
               <p className={`${monthlyIncome - monthlyExpenses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 ${(monthlyIncome - monthlyExpenses).toFixed(2)}
               </p>
             </div>
           </div>
         </Card>
-        <Card className="p-4 border-slate-200">
+        <Card className="p-4 border-border">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-slate-100 rounded-lg">
-              <PiggyBank className="w-5 h-5 text-slate-600" />
+            <div className="p-2 bg-muted rounded-lg">
+              <PiggyBank className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Saved</p>
-              <p className="text-slate-800">${totalSaved.toFixed(2)}</p>
+              <p className="text-sm text-muted-foreground">Saved</p>
+              <p className="text-foreground">${totalSaved.toFixed(2)}</p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Chart */}
-      <Card className="p-4 border-slate-200">
-        <h3 className="text-slate-800 mb-4">Cash Flow (Last 6 Months)</h3>
+      <Card className="p-4 border-border">
+        <h3 className="text-foreground mb-4">Cash Flow (Last 6 Months)</h3>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={chartData}>
             <XAxis 
               dataKey="month" 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={{ fill: '#4f6d4b', fontSize: 12 }}
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={{ fill: '#4f6d4b', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
@@ -196,28 +196,28 @@ export const Dashboard: React.FC = () => {
 
       {/* Transactions Section */}
       <div>
-        <h3 className="text-slate-800 mb-3">Transactions</h3>
+        <h3 className="text-foreground mb-3">Transactions</h3>
         
         {/* Filter */}
         <div className="flex gap-2 mb-4">
           <Button
             variant={filter === 'all' ? 'default' : 'outline'}
             onClick={() => setFilter('all')}
-            className={filter === 'all' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+            className={filter === 'all' ? 'bg-primary text-primary-foreground' : ''}
           >
             All
           </Button>
           <Button
             variant={filter === 'income' ? 'default' : 'outline'}
             onClick={() => setFilter('income')}
-            className={filter === 'income' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+            className={filter === 'income' ? 'bg-primary text-primary-foreground' : ''}
           >
             Income
           </Button>
           <Button
             variant={filter === 'expense' ? 'default' : 'outline'}
             onClick={() => setFilter('expense')}
-            className={filter === 'expense' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+            className={filter === 'expense' ? 'bg-primary text-primary-foreground' : ''}
           >
             Expenses
           </Button>
@@ -226,15 +226,15 @@ export const Dashboard: React.FC = () => {
         {/* Transactions List */}
         <div className="space-y-3">
           {filteredTransactions.length === 0 ? (
-            <Card className="p-8 text-center border-slate-200">
-              <p className="text-slate-500">No transactions yet</p>
-              <p className="text-sm text-slate-400 mt-2">Add your first transaction below</p>
+            <Card className="p-8 text-center border-border">
+              <p className="text-muted-foreground">No transactions yet</p>
+              <p className="text-sm text-muted-foreground/70 mt-2">Add your first transaction below</p>
             </Card>
           ) : (
             filteredTransactions.map((transaction) => {
               const account = accounts.find(a => a.id === transaction.accountId);
               return (
-                <Card key={transaction.id} className="p-4 border-slate-200">
+                <Card key={transaction.id} className="p-4 border-border">
                   <div className="flex items-start justify-between">
                     <div className="flex gap-3">
                       <div className={`p-2 rounded-lg ${
@@ -247,13 +247,13 @@ export const Dashboard: React.FC = () => {
                         )}
                       </div>
                       <div>
-                        <p className="text-slate-800">{transaction.description || 'No description'}</p>
+                        <p className="text-foreground">{transaction.description || 'No description'}</p>
                         <div className="flex gap-2 mt-1">
-                          <Badge variant="secondary" className="bg-slate-100 text-slate-600">
+                          <Badge variant="secondary" className="bg-muted text-muted-foreground">
                             {transaction.category}
                           </Badge>
                           {account && (
-                            <Badge variant="outline" className="border-slate-300 text-slate-600">
+                            <Badge variant="outline" className="border-border text-muted-foreground">
                               {account.name}
                             </Badge>
                           )}
@@ -261,10 +261,10 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`${transaction.type === 'income' ? 'text-green-600' : 'text-slate-800'}`}>
+                      <p className={`${transaction.type === 'income' ? 'text-green-600' : 'text-foreground'}`}>
                         {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                       </p>
-                      <p className="text-sm text-slate-500 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {new Date(transaction.date).toLocaleDateString('en-US', { 
                           month: 'short', 
                           day: 'numeric',
@@ -283,7 +283,7 @@ export const Dashboard: React.FC = () => {
       {/* Add Transaction Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-slate-800 hover:bg-slate-700">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Transaction
           </Button>
@@ -298,7 +298,7 @@ export const Dashboard: React.FC = () => {
                 type="button"
                 variant={formData.type === 'expense' ? 'default' : 'outline'}
                 onClick={() => setFormData({ ...formData, type: 'expense', category: '' })}
-                className={formData.type === 'expense' ? 'bg-slate-800' : ''}
+                className={formData.type === 'expense' ? 'bg-primary text-primary-foreground' : ''}
               >
                 Expense
               </Button>
@@ -306,7 +306,7 @@ export const Dashboard: React.FC = () => {
                 type="button"
                 variant={formData.type === 'income' ? 'default' : 'outline'}
                 onClick={() => setFormData({ ...formData, type: 'income', category: '' })}
-                className={formData.type === 'income' ? 'bg-slate-800' : ''}
+                className={formData.type === 'income' ? 'bg-primary text-primary-foreground' : ''}
               >
                 Income
               </Button>
@@ -371,7 +371,7 @@ export const Dashboard: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Transaction
             </Button>
           </form>

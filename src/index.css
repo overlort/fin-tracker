@@ -4,26 +4,50 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Светлая тема - палитра Finance Tracker */
+    --background: 45 50% 96%;        /* #faf7f0 - Light Linen */
+    --foreground: 135 22% 19%;       /* #263b2b - Deep Woodland */
+    --card: 0 0% 93%;                 /* #ececec - Platinum */
+    --card-foreground: 135 22% 19%;  /* #263b2b - Deep Woodland */
+    --popover: 0 0% 93%;              /* #ececec - Platinum */
+    --popover-foreground: 135 22% 19%; /* #263b2b - Deep Woodland */
+    --primary: 130 25% 66%;           /* #95b99c - Light Moss Green */
+    --primary-foreground: 135 22% 19%; /* #263b2b - Deep Woodland */
+    --secondary: 140 25% 73%;         /* #a7cbb8 - Light Sage */
+    --secondary-foreground: 135 22% 19%; /* #263b2b - Deep Woodland */
+    --muted: 0 0% 93%;                /* #ececec - Platinum */
+    --muted-foreground: 135 28% 31%; /* #4f6d4b - Misty Olive */
+    --accent: 50 50% 67%;             /* #d1c483 - Straw Beige */
+    --accent-foreground: 135 22% 19%; /* #263b2b - Deep Woodland */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 88%;               /* Граница между элементами */
+    --input: 0 0% 88%;                 /* Граница инпутов */
+    --ring: 130 25% 66%;              /* #95b99c - Light Moss Green */
     --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Холодная темная тема - синевато-серые тона */
+    --background: 210 10% 18%;        /* #282d32 - холодный темно-серый */
+    --foreground: 0 0% 93%;            /* #ececec - Platinum */
+    --card: 210 10% 24%;              /* #353b42 - холодный серый */
+    --card-foreground: 0 0% 93%;      /* #ececec - Platinum */
+    --popover: 210 10% 24%;           /* #353b42 - холодный серый */
+    --popover-foreground: 0 0% 93%;   /* #ececec - Platinum */
+    --primary: 135 22% 50%;           /* #5f7f6f - зеленый акцент */
+    --primary-foreground: 0 0% 93%;   /* #ececec - Platinum */
+    --secondary: 210 10% 35%;         /* #525a62 - холодный серый */
+    --secondary-foreground: 0 0% 93%; /* #ececec - Platinum */
+    --muted: 210 10% 24%;             /* #353b42 - холодный серый */
+    --muted-foreground: 0 0% 89%;    /* #e3e3e3 - Pale Silver */
+    --accent: 50 40% 55%;             /* #bfae6f - Soft Sand */
+    --accent-foreground: 0 0% 15%;   /* Темный текст для акцентов */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 10% 30%;            /* #454d55 - граница */
+    --input: 210 10% 30%;             /* #454d55 - граница */
+    --ring: 135 22% 50%;              /* #5f7f6f - зеленый акцент */
   }
 }
 

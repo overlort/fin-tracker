@@ -51,6 +51,16 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Кастомные цвета из палитры
+        surface: "#ececec",
+        text: {
+          DEFAULT: "#263b2b",
+          secondary: "#4f6d4b",
+          light: "#5c715e",
+        },
+        accentBeige: "#f0e6c2",
+        accentGold: "#bfae6f",
+        accentOlive: "#babd69",
       },
       borderRadius: {
         lg: "var(--radius)",

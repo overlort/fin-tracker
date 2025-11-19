@@ -66,17 +66,17 @@ export const Transactions: React.FC = () => {
     <div className="space-y-6">
       {/* Summary */}
       <div className="grid grid-cols-2 gap-4">
-        <Card className="p-4 border-slate-200 bg-green-50">
+        <Card className="p-4 border-border bg-green-50">
           <div className="flex items-center gap-2 mb-2">
             <ArrowUpRight className="w-4 h-4 text-green-600" />
-            <p className="text-sm text-slate-600">Total Income</p>
+            <p className="text-sm text-muted-foreground">Total Income</p>
           </div>
           <p className="text-green-600">${totals.income.toFixed(2)}</p>
         </Card>
-        <Card className="p-4 border-slate-200 bg-red-50">
+        <Card className="p-4 border-border bg-red-50">
           <div className="flex items-center gap-2 mb-2">
             <ArrowDownLeft className="w-4 h-4 text-red-600" />
-            <p className="text-sm text-slate-600">Total Expenses</p>
+            <p className="text-sm text-muted-foreground">Total Expenses</p>
           </div>
           <p className="text-red-600">${totals.expense.toFixed(2)}</p>
         </Card>
@@ -87,21 +87,21 @@ export const Transactions: React.FC = () => {
         <Button
           variant={filter === 'all' ? 'default' : 'outline'}
           onClick={() => setFilter('all')}
-          className={filter === 'all' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+          className={filter === 'all' ? 'bg-primary text-primary-foreground' : 'border-border text-muted-foreground'}
         >
           All
         </Button>
         <Button
           variant={filter === 'income' ? 'default' : 'outline'}
           onClick={() => setFilter('income')}
-          className={filter === 'income' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+          className={filter === 'income' ? 'bg-primary text-primary-foreground' : 'border-border text-muted-foreground'}
         >
           Income
         </Button>
         <Button
           variant={filter === 'expense' ? 'default' : 'outline'}
           onClick={() => setFilter('expense')}
-          className={filter === 'expense' ? 'bg-slate-800' : 'border-slate-300 text-slate-600'}
+          className={filter === 'expense' ? 'bg-primary text-primary-foreground' : 'border-border text-muted-foreground'}
         >
           Expenses
         </Button>
@@ -110,15 +110,15 @@ export const Transactions: React.FC = () => {
       {/* Transactions List */}
       <div className="space-y-3">
         {filteredTransactions.length === 0 ? (
-          <Card className="p-8 text-center border-slate-200">
-            <p className="text-slate-500">No transactions yet</p>
-            <p className="text-sm text-slate-400 mt-2">Add your first transaction below</p>
+          <Card className="p-8 text-center border-border">
+            <p className="text-muted-foreground">No transactions yet</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Add your first transaction below</p>
           </Card>
         ) : (
           filteredTransactions.map((transaction) => {
             const account = accounts.find(a => a.id === transaction.accountId);
             return (
-              <Card key={transaction.id} className="p-4 border-slate-200">
+              <Card key={transaction.id} className="p-4 border-border">
                 <div className="flex items-start justify-between">
                   <div className="flex gap-3">
                     <div className={`p-2 rounded-lg ${
@@ -131,13 +131,13 @@ export const Transactions: React.FC = () => {
                       )}
                     </div>
                     <div>
-                      <p className="text-slate-800">{transaction.description || 'No description'}</p>
+                      <p className="text-foreground">{transaction.description || 'No description'}</p>
                       <div className="flex gap-2 mt-1">
-                        <Badge variant="secondary" className="bg-slate-100 text-slate-600">
+                        <Badge variant="secondary" className="bg-muted text-muted-foreground">
                           {transaction.category}
                         </Badge>
                         {account && (
-                          <Badge variant="outline" className="border-slate-300 text-slate-600">
+                          <Badge variant="outline" className="border-border text-muted-foreground">
                             {account.name}
                           </Badge>
                         )}
@@ -145,10 +145,10 @@ export const Transactions: React.FC = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`${transaction.type === 'income' ? 'text-green-600' : 'text-slate-800'}`}>
+                    <p className={`${transaction.type === 'income' ? 'text-green-600' : 'text-foreground'}`}>
                       {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                     </p>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {new Date(transaction.date).toLocaleDateString('en-US', { 
                         month: 'short', 
                         day: 'numeric',
@@ -166,7 +166,7 @@ export const Transactions: React.FC = () => {
       {/* Add Transaction Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-slate-800 hover:bg-slate-700">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Transaction
           </Button>
@@ -181,7 +181,7 @@ export const Transactions: React.FC = () => {
                 type="button"
                 variant={formData.type === 'expense' ? 'default' : 'outline'}
                 onClick={() => setFormData({ ...formData, type: 'expense', category: '' })}
-                className={formData.type === 'expense' ? 'bg-slate-800' : ''}
+                className={formData.type === 'expense' ? 'bg-primary text-primary-foreground' : ''}
               >
                 Expense
               </Button>
@@ -189,7 +189,7 @@ export const Transactions: React.FC = () => {
                 type="button"
                 variant={formData.type === 'income' ? 'default' : 'outline'}
                 onClick={() => setFormData({ ...formData, type: 'income', category: '' })}
-                className={formData.type === 'income' ? 'bg-slate-800' : ''}
+                className={formData.type === 'income' ? 'bg-primary text-primary-foreground' : ''}
               >
                 Income
               </Button>
@@ -254,7 +254,7 @@ export const Transactions: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Transaction
             </Button>
           </form>

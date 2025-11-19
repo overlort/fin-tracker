@@ -87,17 +87,17 @@ export const Goals: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <Card className="p-6 border-slate-200">
+      <Card className="p-6 border-border">
         <div className="flex items-center gap-2 mb-2">
-          <Target className="w-5 h-5 text-slate-600" />
-          <p className="text-slate-500">Total Saved</p>
+          <Target className="w-5 h-5 text-muted-foreground" />
+          <p className="text-muted-foreground">Total Saved</p>
         </div>
-        <h2 className="text-slate-800">${totalSaved.toFixed(2)}</h2>
+        <h2 className="text-foreground">${totalSaved.toFixed(2)}</h2>
         <Progress 
           value={totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0} 
           className="mt-3 h-2"
         />
-        <p className="text-sm text-slate-400 mt-2">
+        <p className="text-sm text-muted-foreground/70 mt-2">
           ${totalTarget.toFixed(2)} target across {goals.length} goal{goals.length !== 1 ? 's' : ''}
         </p>
       </Card>
@@ -105,10 +105,10 @@ export const Goals: React.FC = () => {
       {/* Goals List */}
       <div className="space-y-3">
         {goals.length === 0 ? (
-          <Card className="p-8 text-center border-slate-200">
-            <Target className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500">No savings goals yet</p>
-            <p className="text-sm text-slate-400 mt-2">Create a goal to start saving</p>
+          <Card className="p-8 text-center border-border">
+            <Target className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+            <p className="text-muted-foreground">No savings goals yet</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Create a goal to start saving</p>
           </Card>
         ) : (
           goals
@@ -124,15 +124,15 @@ export const Goals: React.FC = () => {
               return (
                 <Card 
                   key={goal.id} 
-                  className="p-5 border-slate-200"
+                  className="p-5 border-border"
                   style={{ borderLeftWidth: '4px', borderLeftColor: goal.color }}
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-slate-800">{goal.name}</p>
+                        <p className="text-foreground">{goal.name}</p>
                         <div className="flex gap-2 mt-1">
-                          <Badge variant="secondary" className="bg-slate-100 text-slate-600">
+                          <Badge variant="secondary" className="bg-muted text-muted-foreground">
                             {daysRemaining > 0 ? `${daysRemaining} days left` : goal.deadline ? 'Overdue' : 'No deadline'}
                           </Badge>
                         </div>
@@ -140,7 +140,7 @@ export const Goals: React.FC = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-slate-300 text-slate-600"
+                        className="border-border text-muted-foreground"
                         onClick={() => setContributionDialog({ open: true, goalId: goal.id, amount: '' })}
                       >
                         <TrendingUp className="w-3 h-3 mr-1" />
@@ -150,10 +150,10 @@ export const Goals: React.FC = () => {
                     
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-slate-600">
+                        <span className="text-sm text-muted-foreground">
                           ${goal.current.toFixed(2)} / ${goal.target.toFixed(2)}
                         </span>
-                        <span className="text-sm text-slate-600">{progress.toFixed(0)}%</span>
+                        <span className="text-sm text-muted-foreground">{progress.toFixed(0)}%</span>
                       </div>
                       <Progress 
                         value={progress} 
@@ -173,7 +173,7 @@ export const Goals: React.FC = () => {
       {/* Add Goal Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-slate-800 hover:bg-slate-700">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Savings Goal
           </Button>
@@ -234,7 +234,7 @@ export const Goals: React.FC = () => {
                     key={color.value}
                     type="button"
                     className={`w-10 h-10 rounded-lg transition-all ${
-                      formData.color === color.value ? 'ring-2 ring-offset-2 ring-slate-400' : ''
+                      formData.color === color.value ? 'ring-2 ring-offset-2 ring-primary' : ''
                     }`}
                     style={{ backgroundColor: color.value }}
                     onClick={() => setFormData({ ...formData, color: color.value })}
@@ -244,7 +244,7 @@ export const Goals: React.FC = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Goal
             </Button>
           </form>
@@ -271,7 +271,7 @@ export const Goals: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Contribution
             </Button>
           </form>

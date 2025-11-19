@@ -67,22 +67,22 @@ export const Recurring: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <Card className="p-6 border-slate-200">
+      <Card className="p-6 border-border">
         <div className="flex items-center gap-2 mb-2">
           <ArrowDownLeft className="w-5 h-5 text-red-600" />
-          <p className="text-slate-500">Monthly Recurring</p>
+          <p className="text-muted-foreground">Monthly Recurring</p>
         </div>
-        <h2 className="text-slate-800">${totalMonthly.toFixed(2)}</h2>
-        <p className="text-sm text-slate-400 mt-2">{recurring.length} active payment{recurring.length !== 1 ? 's' : ''}</p>
+        <h2 className="text-foreground">${totalMonthly.toFixed(2)}</h2>
+        <p className="text-sm text-muted-foreground/70 mt-2">{recurring.length} active payment{recurring.length !== 1 ? 's' : ''}</p>
       </Card>
 
       {/* Recurring Payments List */}
       <div className="space-y-3">
         {recurring.length === 0 ? (
-          <Card className="p-8 text-center border-slate-200">
-            <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500">No recurring payments yet</p>
-            <p className="text-sm text-slate-400 mt-2">Add bills and subscriptions to track them</p>
+          <Card className="p-8 text-center border-border">
+            <Calendar className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+            <p className="text-muted-foreground">No recurring payments yet</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Add bills and subscriptions to track them</p>
           </Card>
         ) : (
           recurring
@@ -92,23 +92,23 @@ export const Recurring: React.FC = () => {
               const daysUntil = getDaysUntil(payment.nextDate);
               
               return (
-                <Card key={payment.id} className="p-4 border-slate-200">
+                <Card key={payment.id} className="p-4 border-border">
                   <div className="flex items-start justify-between">
                     <div className="flex gap-3">
                       <div className="p-2 rounded-lg bg-red-100">
                         <Calendar className="w-5 h-5 text-red-600" />
                       </div>
                       <div>
-                        <p className="text-slate-800">{payment.name}</p>
+                        <p className="text-foreground">{payment.name}</p>
                         <div className="flex gap-2 mt-1">
-                          <Badge variant="secondary" className="bg-slate-100 text-slate-600">
+                          <Badge variant="secondary" className="bg-muted text-muted-foreground">
                             {payment.category}
                           </Badge>
-                          <Badge variant="outline" className="border-slate-300 text-slate-600 capitalize">
+                          <Badge variant="outline" className="border-border text-muted-foreground capitalize">
                             {payment.frequency}
                           </Badge>
                           {account && (
-                            <Badge variant="outline" className="border-slate-300 text-slate-600">
+                            <Badge variant="outline" className="border-border text-muted-foreground">
                               {account.name}
                             </Badge>
                           )}
@@ -116,8 +116,8 @@ export const Recurring: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-slate-800">${payment.amount.toFixed(2)}</p>
-                      <p className="text-sm text-slate-500 mt-1">
+                      <p className="text-foreground">${payment.amount.toFixed(2)}</p>
+                      <p className="text-sm text-muted-foreground mt-1">
                         {daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `In ${daysUntil} days`}
                       </p>
                     </div>
@@ -131,7 +131,7 @@ export const Recurring: React.FC = () => {
       {/* Add Recurring Payment Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-slate-800 hover:bg-slate-700">
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Recurring Payment
           </Button>
@@ -215,7 +215,7 @@ export const Recurring: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-700">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Payment
             </Button>
           </form>
