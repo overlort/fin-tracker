@@ -9,12 +9,17 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        navigateFallback: '/fin-tracker/index.html',
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+      },
       manifest: {
         name: "Учет Финансов",
         short_name: "FiT",
         description: "Приложение для учета личных финансов",
-        start_url: ".",
-        scope: "/",
+        start_url: "./",
+        scope: "./",
         display: "standalone",
         orientation: "portrait",
         background_color: "#282d32",

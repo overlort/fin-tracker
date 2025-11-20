@@ -38,6 +38,11 @@ const CACHE_NAME = 'fin-tracker-v1';
 #### GitHub Pages
 - Бесплатно для публичных репозиториев
 - Нужно настроить GitHub Actions для автоматического деплоя
+- **Важно для PWA**: 
+  - Приложение должно быть доступно по HTTPS (GitHub Pages предоставляет это автоматически)
+  - В `vite.config.ts` должен быть указан правильный `base` путь (например, `/fin-tracker/`)
+  - `scope` и `start_url` в манифесте должны быть относительными (`./`) для правильной работы PWA
+  - Деплой: `npm run deploy` (использует gh-pages)
 
 #### Firebase Hosting
 - Бесплатный тариф
@@ -252,4 +257,97 @@ navigator.serviceWorker.getRegistrations().then(registrations => {
 
 - Можно откатиться к предыдущему деплою через веб-интерфейс
 - Или через CLI: `vercel rollback` / `netlify deploy --prod --dir=build`
+
+## 10. Требования для деплоя PWA на сервер
+
+### Обязательные требования:
+
+1. **HTTPS** - PWA работает только через HTTPS (кроме localhost)
+   - GitHub Pages, Vercel, Netlify предоставляют HTTPS автоматически
+   - Для собственного сервера нужно настроить SSL-сертификат (Let's Encrypt)
+
+2. **Правильная конфигурация base path**
+   - Для GitHub Pages: `base: "/fin-tracker/"` в `vite.config.ts`
+   - Для корневого домена: `base: "/"`
+   - Для поддомена: `base: "/"` или соответствующий путь
+
+3. **Manifest.json с правильными путями**
+   - `start_url` должен быть относительным (`./`) для GitHub Pages
+   - `scope` должен соответствовать base path
+   - Все пути к иконкам должны быть относительными
+
+4. **Service Worker**
+   - Должен быть зарегистрирован с правильным scope
+   - Должен работать через HTTPS
+   - Должен правильно кешировать ресурсы
+
+### Настройка для GitHub Pages:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  base: "/fin-tracker/", // Имя вашего репозитория
+  plugins: [
+    VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        navigateFallback: '/fin-tracker/index.html',
+      },
+      manifest: {
+        start_url: "./",  // Относительный путь
+        scope: "./",      // Относительный путь
+        // ... остальные настройки
+      }
+    })
+  ]
+});
+```
+
+### Проверка работы PWA:
+
+1. **Проверка манифеста:**
+   - Откройте DevTools → Application → Manifest
+   - Убедитесь, что все иконки загружаются
+   - Проверьте, что `start_url` и `scope` правильные
+
+2. **Проверка Service Worker:**
+   - DevTools → Application → Service Workers
+   - Должен быть статус "activated and is running"
+   - Проверьте, что scope правильный
+
+3. **Проверка установки:**
+   - В Chrome/Edge: должна появиться кнопка "Установить" в адресной строке
+   - В мобильных браузерах: должно появиться предложение "Добавить на главный экран"
+
+### Типичные проблемы и решения:
+
+**Проблема:** PWA не устанавливается
+- **Решение:** Проверьте, что сайт работает через HTTPS
+- **Решение:** Убедитесь, что manifest.json доступен и валиден
+- **Решение:** Проверьте, что Service Worker зарегистрирован
+
+**Проблема:** Service Worker не работает на GitHub Pages
+- **Решение:** Убедитесь, что `scope` в манифесте относительный (`./`)
+- **Решение:** Проверьте, что `base` в vite.config.ts соответствует пути репозитория
+- **Решение:** Пересоберите проект после изменения конфигурации
+
+**Проблема:** Иконки не загружаются
+- **Решение:** Проверьте пути к иконкам в manifest.json (должны быть относительными)
+- **Решение:** Убедитесь, что файлы иконок присутствуют в папке `build`
+
+### Команды для деплоя:
+
+```bash
+# GitHub Pages
+npm run build
+npm run deploy
+
+# Или вручную через gh-pages
+npm run build
+npx gh-pages -d build
+
+# Локальная проверка сборки
+npm run build
+npm run preview
+```
 
