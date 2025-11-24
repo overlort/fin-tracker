@@ -19,7 +19,6 @@ export interface Account {
   name: string;
   type: 'checking' | 'savings' | 'credit' | 'cash';
   balance: number;
-  color: string;
 }
 
 export interface RecurringPayment {
@@ -88,7 +87,6 @@ const FinanceDataProviderInner: React.FC<FinanceDataProviderInnerProps> = ({ chi
         name: row.name,
         balance: row.balance || 0,
         type: (row.type || 'checking') as 'checking' | 'savings' | 'credit' | 'cash',
-        color: row.color || '#64748b',
       }));
       setAccounts(accountsMapped);
 
@@ -228,7 +226,6 @@ const FinanceDataProviderInner: React.FC<FinanceDataProviderInnerProps> = ({ chi
         name: accountData.name,
         balance: accountData.balance || 0,
         type: accountData.type || 'checking',
-        color: accountData.color || '#64748b',
         created_at: now,
         updated_at: now,
       });

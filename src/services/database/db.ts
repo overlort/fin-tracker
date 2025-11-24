@@ -7,7 +7,6 @@ export interface Account {
   name: string;
   type: 'checking' | 'savings' | 'credit' | 'cash';
   balance: number;
-  color: string;
   created_at: number;
   updated_at: number;
 }

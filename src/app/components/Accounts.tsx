@@ -17,7 +17,6 @@ export const Accounts: React.FC = () => {
     name: '',
     type: 'checking' as 'checking' | 'savings' | 'credit' | 'cash',
     balance: '',
-    color: '#95b99c',
   });
 
   const accountIcons = {
@@ -27,15 +26,6 @@ export const Accounts: React.FC = () => {
     cash: Banknote,
   };
 
-  const accountColors = [
-    { value: '#64748b', label: 'Серый' },
-    { value: '#3b82f6', label: 'Синий' },
-    { value: '#10b981', label: 'Зеленый' },
-    { value: '#f59e0b', label: 'Оранжевый' },
-    { value: '#8b5cf6', label: 'Фиолетовый' },
-    { value: '#ec4899', label: 'Розовый' },
-  ];
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -43,14 +33,12 @@ export const Accounts: React.FC = () => {
         name: formData.name,
         type: formData.type,
         balance: parseFloat(formData.balance),
-        color: formData.color,
       });
       setIsOpen(false);
       setFormData({
         name: '',
         type: 'checking',
         balance: '',
-        color: '#95b99c',
       });
     } catch (error) {
       console.error('Error adding account:', error);
@@ -83,15 +71,11 @@ export const Accounts: React.FC = () => {
               <Card 
                 key={account.id} 
                 className="p-5 border-border"
-                style={{ borderLeftWidth: '4px', borderLeftColor: account.color }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div 
-                      className="p-3 rounded-lg"
-                      style={{ backgroundColor: `${account.color}15` }}
-                    >
-                      <Icon className="w-6 h-6" style={{ color: account.color }} />
+                    <div className="p-3 rounded-lg bg-muted">
+                      <Icon className="w-6 h-6 text-muted-foreground" />
                     </div>
                     <div>
                       <p className="text-foreground">{account.name}</p>
@@ -161,24 +145,6 @@ export const Accounts: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, balance: e.target.value })}
                 required
               />
-            </div>
-
-            <div>
-              <Label>Цвет</Label>
-              <div className="grid grid-cols-6 gap-2 mt-2">
-                {accountColors.map((color) => (
-                  <button
-                    key={color.value}
-                    type="button"
-                    className={`w-10 h-10 rounded-lg transition-all ${
-                      formData.color === color.value ? 'ring-2 ring-offset-2 ring-primary' : ''
-                    }`}
-                    style={{ backgroundColor: color.value }}
-                    onClick={() => setFormData({ ...formData, color: color.value })}
-                    title={color.label}
-                  />
-                ))}
-              </div>
             </div>
 
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">

@@ -9,7 +9,11 @@ import {
   Plus,
   ArrowUpRight,
   ArrowDownLeft,
-  RussianRuble
+  RussianRuble,
+  Wallet,
+  CreditCard,
+  Building2,
+  Banknote
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog';
@@ -65,6 +69,13 @@ export const Dashboard: React.FC = () => {
 
   // Calculate totals
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+  
+  const accountIcons = {
+    checking: Building2,
+    savings: Wallet,
+    credit: CreditCard,
+    cash: Banknote,
+  };
   
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -127,30 +138,70 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Balance Card */}
-      <Card className="bg-primary text-primary-foreground p-6 border-0">
-        <p className="text-primary-foreground/80 mb-2">Общий баланс</p>
-        <h2 className="text-primary-foreground mb-4">₽{totalBalance.toFixed(2)}</h2>
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
-              <TrendingUp className="w-4 h-4" />
-              <span className="text-sm">Доходы</span>
+      {/* Balance Card and Accounts Gallery */}
+      <div className="flex flex-row gap-4 overflow-x-auto pb-2 -mx-4 px-4">
+        <Card className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-primary-foreground/20">
+              <DollarSign className="w-5 h-5 text-primary-foreground" />
             </div>
-            <p className="text-green-400">₽{monthlyIncome.toFixed(2)}</p>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 text-primary-foreground/80 mb-1">
-              <TrendingDown className="w-4 h-4" />
-              <span className="text-sm">Расходы</span>
+            <div>
+              <p className="text-primary-foreground/90 text-sm font-medium">Общий баланс</p>
+              <p className="text-primary-foreground/70 text-xs">Все счета</p>
             </div>
-            <p className="text-red-400">₽{monthlyExpenses.toFixed(2)}</p>
           </div>
-        </div>
-      </Card>
+          <h2 className="text-primary-foreground text-2xl font-semibold">₽{totalBalance.toFixed(2)}</h2>
+        </Card>
+        {accounts.map((acc) => {
+          const Icon = accountIcons[acc.type];
+          return (
+            <Card
+              key={acc.id}
+              className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-primary-foreground/20">
+                  <Icon className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <p className="text-primary-foreground/90 text-sm font-medium">{acc.name}</p>
+                  <p className="text-primary-foreground/70 text-xs">
+                    {acc.type === 'checking' ? 'Расчетный' : 
+                     acc.type === 'savings' ? 'Накопительный' : 
+                     acc.type === 'credit' ? 'Кредитная карта' : 'Наличные'}
+                  </p>
+                </div>
+              </div>
+              <h2 className="text-primary-foreground text-2xl font-semibold">₽{acc.balance.toFixed(2)}</h2>
+            </Card>
+          );
+        })}
+      </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
+        <Card className="p-4 border-border">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-muted rounded-lg">
+              <TrendingUp className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Доходы</p>
+              <p className="text-green-600">₽{monthlyIncome.toFixed(2)}</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="p-4 border-border">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-muted rounded-lg">
+              <TrendingDown className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Расходы</p>
+              <p className="text-red-600">₽{monthlyExpenses.toFixed(2)}</p>
+            </div>
+          </div>
+        </Card>
         <Card className="p-4 border-border">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-muted rounded-lg">
