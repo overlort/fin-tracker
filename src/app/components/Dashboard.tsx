@@ -24,8 +24,9 @@ import { Badge } from '@/shared/components/ui/badge';
 import { useFinanceData } from '@/app/providers/FinanceDataProvider';
 
 export const Dashboard: React.FC = () => {
-  const { transactions, accounts, goals, addTransaction } = useFinanceData();
+  const { transactions, accounts, goals, addTransaction, addAccount } = useFinanceData();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all');
 
   const [formData, setFormData] = useState({
@@ -37,9 +38,34 @@ export const Dashboard: React.FC = () => {
     date: new Date().toISOString().split('T')[0],
   });
 
+  const [accountFormData, setAccountFormData] = useState({
+    name: '',
+    type: 'checking' as 'checking' | 'savings' | 'credit' | 'cash',
+    balance: '',
+  });
+
   const categories = {
     income: ['Зарплата', 'Фриланс', 'Инвестиции', 'Подарок', 'Прочее'],
     expense: ['Еда', 'Транспорт', 'Покупки', 'Счета', 'Развлечения', 'Здоровье', 'Прочее'],
+  };
+
+  const handleAccountSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await addAccount({
+        name: accountFormData.name,
+        type: accountFormData.type,
+        balance: parseFloat(accountFormData.balance),
+      });
+      setIsAccountDialogOpen(false);
+      setAccountFormData({
+        name: '',
+        type: 'checking',
+        balance: '',
+      });
+    } catch (error) {
+      console.error('Error adding account:', error);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,43 +165,102 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Balance Card and Accounts Gallery */}
-      <div className="flex flex-row gap-4 overflow-x-auto pb-2 -mx-4 px-4">
-        <Card className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-primary-foreground/20">
-              <DollarSign className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <div>
-              <p className="text-primary-foreground/90 text-sm font-medium">Общий баланс</p>
-              <p className="text-primary-foreground/70 text-xs">Все счета</p>
-            </div>
-          </div>
-          <h2 className="text-primary-foreground text-2xl font-semibold">₽{totalBalance.toFixed(2)}</h2>
-        </Card>
-        {accounts.map((acc) => {
-          const Icon = accountIcons[acc.type];
-          return (
-            <Card
-              key={acc.id}
-              className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-primary-foreground/20">
-                  <Icon className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <div>
-                  <p className="text-primary-foreground/90 text-sm font-medium">{acc.name}</p>
-                  <p className="text-primary-foreground/70 text-xs">
-                    {acc.type === 'checking' ? 'Расчетный' : 
-                     acc.type === 'savings' ? 'Накопительный' : 
-                     acc.type === 'credit' ? 'Кредитная карта' : 'Наличные'}
-                  </p>
-                </div>
+      <div className="space-y-3">
+        <div className="flex flex-row gap-4 overflow-x-auto pb-2 -mx-4 px-4">
+          <Card className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-primary-foreground/20">
+                <DollarSign className="w-5 h-5 text-primary-foreground" />
               </div>
-              <h2 className="text-primary-foreground text-2xl font-semibold">₽{acc.balance.toFixed(2)}</h2>
-            </Card>
-          );
-        })}
+              <div>
+                <p className="text-primary-foreground/90 text-sm font-medium">Общий баланс</p>
+                <p className="text-primary-foreground/70 text-xs">Все счета</p>
+              </div>
+            </div>
+            <h2 className="text-primary-foreground text-2xl font-semibold">₽{totalBalance.toFixed(2)}</h2>
+          </Card>
+          {accounts.map((acc) => {
+            const Icon = accountIcons[acc.type];
+            return (
+              <Card
+                key={acc.id}
+                className="p-6 border-0 min-w-[55vw] flex-shrink-0 bg-primary text-primary-foreground"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-primary-foreground/20">
+                    <Icon className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-primary-foreground/90 text-sm font-medium">{acc.name}</p>
+                    <p className="text-primary-foreground/70 text-xs">
+                      {acc.type === 'checking' ? 'Расчетный' : 
+                       acc.type === 'savings' ? 'Накопительный' : 
+                       acc.type === 'credit' ? 'Кредитная карта' : 'Наличные'}
+                    </p>
+                  </div>
+                </div>
+                <h2 className="text-primary-foreground text-2xl font-semibold">₽{acc.balance.toFixed(2)}</h2>
+              </Card>
+            );
+          })}
+        </div>
+        
+        {/* Add Account Button */}
+        <Dialog open={isAccountDialogOpen} onOpenChange={setIsAccountDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Plus className="w-4 h-4 mr-2" />
+              Добавить счет
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Новый счет</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleAccountSubmit} className="space-y-4">
+              <div>
+                <Label>Название счета</Label>
+                <Input
+                  placeholder="Например, Основной расчетный"
+                  value={accountFormData.name}
+                  onChange={(e) => setAccountFormData({ ...accountFormData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div>
+                <Label>Тип счета</Label>
+                <Select value={accountFormData.type} onValueChange={(value: any) => setAccountFormData({ ...accountFormData, type: value })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="checking">Расчетный</SelectItem>
+                    <SelectItem value="savings">Накопительный</SelectItem>
+                    <SelectItem value="credit">Кредитная карта</SelectItem>
+                    <SelectItem value="cash">Наличные</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Начальный баланс</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={accountFormData.balance}
+                  onChange={(e) => setAccountFormData({ ...accountFormData, balance: e.target.value })}
+                  required
+                />
+              </div>
+
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                Добавить счет
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Quick Stats */}
